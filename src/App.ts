@@ -10,7 +10,7 @@ import * as cors from 'cors'
 import * as morgan from 'morgan'
 import helmet from 'helmet'
 // routes
-import rootRoutes from './routes'
+import studentRoutes from './routes/student'
 import quizRoutes from './routes/quiz'
 
 class App {
@@ -28,7 +28,7 @@ class App {
 
   private mountRoutes (): void {
     // mount routes
-    this.app.use('/api', rootRoutes)
+    this.app.use('/api/student', studentRoutes)
     this.app.use('/api/quiz', quizRoutes)
   }
 }
