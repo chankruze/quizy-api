@@ -6,6 +6,7 @@ Copyright (c) geekofia 2022 and beyond
 */
 
 import { ObjectId } from 'bson'
+import { Quiz } from '../types/quiz'
 
 let quizzes
 
@@ -97,6 +98,20 @@ export default class QuizzesDAO {
     } catch (e) {
       console.error(e)
       return []
+    }
+  }
+
+  /**
+   * @param {Quiz} quiz
+   * @returns {string}
+   */
+  static async addQuiz (quiz: Quiz) {
+    try {
+      const result = await quizzes.insertOne(quiz)
+      return result.insertedId
+    } catch (e) {
+      console.error(e)
+      return ''
     }
   }
 }
