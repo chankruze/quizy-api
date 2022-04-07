@@ -5,6 +5,8 @@ Created: Thu Apr 07 2022 11:50:07 GMT+0530 (India Standard Time)
 Copyright (c) geekofia 2022 and beyond
 */
 
+import { Student } from '../types/student'
+
 // import { ObjectId } from 'bson'
 
 let students
@@ -107,6 +109,32 @@ export default class StudentsDAO {
     } catch (e) {
       console.error(e)
       return []
+    }
+  }
+
+  /**
+   * @param {string} email
+   * @returns {Student}
+   */
+  static async getStudentByEmail (email: string) {
+    try {
+      return await students.findOne({ email })
+    } catch (e) {
+      console.error(e)
+      return ''
+    }
+  }
+
+  /**
+   * @param {Student} student
+   * @returns {string}
+   */
+  static async addStudent (student: Student) {
+    try {
+      return await students.insertOne(student)
+    } catch (e) {
+      console.error(e)
+      return ''
     }
   }
 }
