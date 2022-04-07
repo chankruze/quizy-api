@@ -11,10 +11,10 @@ import * as morgan from 'morgan'
 import helmet from 'helmet'
 // routes
 import rootRoutes from './routes'
-import lessonRoutes from './routes/lesson'
+import quizRoutes from './routes/quiz'
 
 class App {
-  public app;
+  public app
 
   constructor () {
     this.app = express()
@@ -28,8 +28,8 @@ class App {
 
   private mountRoutes (): void {
     // mount routes
-    this.app.use('/', rootRoutes)
-    this.app.use('/lesson', lessonRoutes)
+    this.app.use('/api', rootRoutes)
+    this.app.use('/api/quiz', quizRoutes)
   }
 }
 

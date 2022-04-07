@@ -6,12 +6,20 @@ Copyright (c) geekofia 2022 and beyond
 */
 
 import * as express from 'express'
-import lessons from '../../data/lesssons'
+import axios from 'axios'
 
 const router = express.Router()
 
-router.get('/all', (req, res) => {
-  res.json(lessons)
+router.get('/all', async (req, res) => {
+  const { data } = await axios
+    .get('https://my.api.mockaroo.com/quiz_schema.json?key=cf5ee360')
+    .catch((error) =>
+      res.status(500).json({
+        message: 'Error fetching quizzes',
+        error: error.message
+      })
+    )
+  res.json(data)
 })
 
 router.post('/add', (req, res) => {
