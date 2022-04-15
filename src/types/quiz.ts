@@ -6,22 +6,22 @@ Copyright (c) geekofia 2022 and beyond
 */
 
 export type Option = {
-  _id: string
-  value: string
   label: string
-  isCorrect: boolean
+  value: string
 }
 
 export type Question = {
-  _id: string
-  label: string
+  title: string
   options: Array<Option>
+  answer: string | number
 }
 
 export type Quiz = {
   _id: string
-  name: string
-  semester: number
+  title: string
+  description: string
   branch: string
+  semester: string
+  date: string
   questions: Array<Question>
 }

@@ -42,7 +42,7 @@ export default class QuizzesDAO {
    * @param {number} semester
    * @returns {Array<Quiz>}
    */
-  static async getQuizzesBySemester (semester: number) {
+  static async getAllQuizzesBySemester (semester: number) {
     try {
       const cursor = await quizzes.find({
         semester
@@ -58,7 +58,7 @@ export default class QuizzesDAO {
    * @param {string} branch
    * @returns {Array<Quiz>}
    */
-  static async getQuizzesByBranch (branch: string) {
+  static async getAllQuizzesByBranch (branch: string) {
     try {
       const cursor = await quizzes.find({
         branch
@@ -74,7 +74,7 @@ export default class QuizzesDAO {
    * @param {string} title
    * @returns {Array<Quiz>}
    */
-  static async getQuizzesByTitle (title: string) {
+  static async getAllQuizzesByTitle (title: string) {
     try {
       const cursor = await quizzes.find({
         title
@@ -90,9 +90,9 @@ export default class QuizzesDAO {
    * @param {string} quizId
    * @returns {Quiz}
    */
-  static async getQuizByID (quizId: string) {
+  static async getOneQuizByID (quizId: string) {
     try {
-      return await quizzes.find({
+      return await quizzes.findOne({
         _id: new ObjectId(quizId)
       })
     } catch (e) {
@@ -105,13 +105,37 @@ export default class QuizzesDAO {
    * @param {Quiz} quiz
    * @returns {string}
    */
-  static async addQuiz (quiz: Quiz) {
+  static async addOneQuiz (quiz: Quiz) {
     try {
       const result = await quizzes.insertOne(quiz)
       return result.insertedId
     } catch (e) {
       console.error(e)
       return ''
+    }
+  }
+
+  static async updateOneQuiz (quiz: Quiz) {
+    try {
+      const result = await quizzes.updateOne(
+        {
+          _id: new ObjectId(quiz._id)
+        },
+        {
+          $set: {
+            title: quiz.title,
+            description: quiz.description,
+            branch: quiz.branch,
+            semester: quiz.semester,
+            questions: quiz.questions,
+            date: quiz.date
+          }
+        }
+      )
+      return result.modifiedCount
+    } catch (e) {
+      console.error(e)
+      return 0
     }
   }
 }
