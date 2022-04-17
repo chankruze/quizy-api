@@ -11,6 +11,7 @@ import { MongoClient, MongoClientOptions } from 'mongodb'
 import { banner } from './utils'
 import StudentsDAO from './dao/studentsDAO'
 import QuizzesDAO from './dao/quizzesDAO'
+import UsersDAO from './dao/usersDAO'
 
 // import env variables
 dotenv.config()
@@ -47,6 +48,7 @@ if (!process.env.DB_URI) {
       // TODO: inject mongo client
       await StudentsDAO.injectDB(client)
       await QuizzesDAO.injectDB(client)
+      await UsersDAO.injectDB(client)
       // start listening on port
       app.listen(port, banner(port)).on('error', (err) => {
         if (err.message.includes('EADDRINUSE')) {

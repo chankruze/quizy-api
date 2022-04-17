@@ -12,6 +12,7 @@ import helmet from 'helmet'
 // routes
 import studentRoutes from './routes/student'
 import quizRoutes from './routes/quiz'
+import userRoutes from './routes/user'
 
 class App {
   public app
@@ -30,6 +31,7 @@ class App {
     // mount routes
     this.app.use('/api/student', studentRoutes)
     this.app.use('/api/quiz', quizRoutes)
+    this.app.use('/api/user', userRoutes)
   }
 }
 

@@ -115,6 +115,10 @@ export default class QuizzesDAO {
     }
   }
 
+  /**
+   * @param {Quiz} quiz
+   * @returns {number} modifiedCount
+   */
   static async updateOneQuiz (quiz: Quiz) {
     try {
       const result = await quizzes.updateOne(
