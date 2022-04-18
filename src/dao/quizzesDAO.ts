@@ -24,9 +24,13 @@ export default class QuizzesDAO {
     }
   }
 
+  /***************************************************************************
+   * READ METHODS
+   **************************************************************************/
+
   /**
    * @param {null}
-   * @returns {Array<Quiz>}
+   * @returns {Array<Quiz> | []} quizzes | []
    */
   static async getAllQuizzes () {
     try {
@@ -40,7 +44,7 @@ export default class QuizzesDAO {
 
   /**
    * @param {number} semester
-   * @returns {Array<Quiz>}
+   * @returns {Array<Quiz> | []} quizzes | []
    */
   static async getAllQuizzesBySemester (semester: number) {
     try {
@@ -56,7 +60,7 @@ export default class QuizzesDAO {
 
   /**
    * @param {string} branch
-   * @returns {Array<Quiz>}
+   * @returns {Array<Quiz> | []} quizzes | []
    */
   static async getAllQuizzesByBranch (branch: string) {
     try {
@@ -72,7 +76,7 @@ export default class QuizzesDAO {
 
   /**
    * @param {string} title
-   * @returns {Array<Quiz>}
+   * @returns {Array<Quiz> | []} quizzes | []
    */
   static async getAllQuizzesByTitle (title: string) {
     try {
@@ -88,7 +92,7 @@ export default class QuizzesDAO {
 
   /**
    * @param {string} quizId
-   * @returns {Quiz}
+   * @returns {Quiz | null} quiz | null
    */
   static async getOneQuizByID (quizId: string) {
     try {
@@ -97,13 +101,17 @@ export default class QuizzesDAO {
       })
     } catch (e) {
       console.error(e)
-      return []
+      return null
     }
   }
 
+  /***************************************************************************
+   * CREATE METHODS
+   **************************************************************************/
+
   /**
    * @param {Quiz} quiz
-   * @returns {string}
+   * @returns {string | null} quizId
    */
   static async addOneQuiz (quiz: Quiz) {
     try {
@@ -111,9 +119,13 @@ export default class QuizzesDAO {
       return result.insertedId
     } catch (e) {
       console.error(e)
-      return ''
+      return null
     }
   }
+
+  /***************************************************************************
+   * UPDATE METHODS
+   **************************************************************************/
 
   /**
    * @param {Quiz} quiz
@@ -121,22 +133,40 @@ export default class QuizzesDAO {
    */
   static async updateOneQuiz (quiz: Quiz) {
     try {
+      // omit the "_id" field from the quiz object
+      const { _id, ...rest } = quiz
+
       const result = await quizzes.updateOne(
         {
-          _id: new ObjectId(quiz._id)
+          _id: new ObjectId(_id)
         },
         {
           $set: {
-            title: quiz.title,
-            description: quiz.description,
-            branch: quiz.branch,
-            semester: quiz.semester,
-            questions: quiz.questions,
-            date: quiz.date
+            ...rest
           }
         }
       )
       return result.modifiedCount
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /***************************************************************************
+   * DELETE METHODS
+   **************************************************************************/
+  /**
+   * @param {string} quizId
+   * @returns {number} deletedCount
+   */
+  static async deleteOneQuiz (quizId: string) {
+    try {
+      const result = await quizzes.deleteOne({
+        _id: new ObjectId(quizId)
+      })
+
+      return result.deletedCount
     } catch (e) {
       console.error(e)
       return 0

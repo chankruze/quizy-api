@@ -5,9 +5,8 @@ Created: Thu Apr 07 2022 11:50:07 GMT+0530 (India Standard Time)
 Copyright (c) geekofia 2022 and beyond
 */
 
+import { ObjectId } from 'bson'
 import { Student } from '../types/student'
-
-// import { ObjectId } from 'bson'
 
 let students
 
@@ -26,9 +25,13 @@ export default class StudentsDAO {
     }
   }
 
+  /***************************************************************************
+   * READ METHODS
+   ***************************************************************************/
+
   /**
    * @param {number} semester
-   * @returns {Array<Student>}
+   * @returns {Array<Student> | []} students | []
    */
   static async getAllStudentsBySemester (semester: number) {
     try {
@@ -50,7 +53,7 @@ export default class StudentsDAO {
 
   /**
    * @param {string} branch
-   * @returns {Array<Student>}
+   * @returns {Array<Student> | []} students | []
    */
   static async getAllStudentsByBranch (branch: string) {
     try {
@@ -73,7 +76,7 @@ export default class StudentsDAO {
   /**
    * @param {string} branch
    * @param {number} semester
-   * @returns {Array<Student>}
+   * @returns {Array<Student> | []} students | []
    */
   static async getAllStudentsByBranchAndSemester (
     branch: string,
@@ -99,42 +102,134 @@ export default class StudentsDAO {
 
   /**
    * @param {string} enrollmentNo
-   * @returns {Student}
+   * @returns {Student | null} student | null
    */
-  static async getStudentByEnrollmentNo (enrollmentNo: string) {
+  static async getOneStudentByEnrollmentNo (enrollmentNo: string) {
     try {
       // Find a particular student matching the "enrollmentNo" parameter
       // project with all fields
       return await students.findOne({ enrollmentNo })
     } catch (e) {
       console.error(e)
-      return []
+      return null
     }
   }
 
   /**
    * @param {string} email
-   * @returns {Student}
+   * @returns {Student | null} student | null
    */
-  static async getStudentByEmail (email: string) {
+  static async getOneStudentByEmail (email: string) {
     try {
       return await students.findOne({ email })
     } catch (e) {
       console.error(e)
-      return ''
+      return null
     }
   }
 
   /**
-   * @param {Student} student
-   * @returns {string}
+   * @param {string} studentId
+   * @returns {Student | null} student | null
    */
-  static async addStudent (student: Student) {
+  static async getOneStudentByID (studentId: string) {
     try {
-      return await students.insertOne(student)
+      return await students.findOne({ _id: studentId })
     } catch (e) {
       console.error(e)
-      return ''
+      return null
+    }
+  }
+
+  /***************************************************************************
+   * CREATE METHODS
+   ***************************************************************************/
+
+  /**
+   * @param {Student} student
+   * @returns {string | null} studentId | null
+   */
+  static async addOneStudent (student: Student) {
+    try {
+      const result = await students.insertOne(student)
+      return result.insertedId
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+  }
+
+  /***************************************************************************
+   * UPDATE METHODS
+   **************************************************************************/
+
+  /**
+   * @param {Student} student
+   * @returns {number} modifiedCount
+   */
+  static async updateOneStudent (student: Student) {
+    try {
+      // omit the "_id" field from the student object
+      const { _id, ...rest } = student
+
+      const result = await students.updateOne(
+        {
+          _id: new ObjectId(_id)
+        },
+        {
+          $set: {
+            ...rest
+          }
+        }
+      )
+      return result.modifiedCount
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /**
+   * @param {string} studentId
+   * @returns {number} modifiedCount
+   */
+  static async verifyOneStudent (studentId: string) {
+    try {
+      const result = await students.updateOne(
+        {
+          _id: new ObjectId(studentId)
+        },
+        {
+          $set: {
+            status: 'verified'
+          }
+        }
+      )
+      return result.modifiedCount
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /***************************************************************************
+   * DELETE METHODS
+   ***************************************************************************/
+
+  /**
+   * @param {string} studentId
+   * @returns {number} deletedCount
+   */
+  static async deleteOneStudent (studentId: string) {
+    try {
+      const result = await students.deleteOne({
+        _id: new ObjectId(studentId)
+      })
+
+      return result.deletedCount
+    } catch (e) {
+      console.error(e)
+      return 0
     }
   }
 }

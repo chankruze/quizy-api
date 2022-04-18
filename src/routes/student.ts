@@ -79,4 +79,60 @@ router.get('/semester/:semester', async (req, res) => {
   return res.status(404).json({ students: null, message: 'No students found' })
 })
 
+/**
+ * Route serving a student by its id
+ * @name get/:id
+ */
+router.get('/:id', async (req, res) => {
+  const student = await StudentsDAO.getOneStudentByID(req.params.id)
+
+  if (student) return res.json({ student })
+
+  return res.status(404).json({ message: 'Student not found' })
+})
+
+/**
+ * Route updates a student by its id
+ * @name put/:id
+ */
+router.put('/:id', async (req, res) => {
+  const modifiedCount = await StudentsDAO.updateOneStudent(req.body)
+
+  if (modifiedCount === 1) {
+    return res.json({ message: 'Student updated' })
+  }
+
+  return res.status(404).json({ message: 'Student not found' })
+})
+
+/**
+ * Route verifies a student by enrollment number
+ * @name put/:id/verify
+ */
+router.put('/:id/verify', async (req, res) => {
+  const modifiedCount = await StudentsDAO.verifyOneStudent(req.params.id)
+
+  if (modifiedCount === 1) {
+    return res.json({ message: 'Student verified' })
+  }
+
+  return res.status(404).json({ message: 'Student not found' })
+})
+
+/**
+ * Route verifies a student by enrollment number
+ * @name delete/:id
+ */
+router.put('/:id', async (req, res) => {
+  const deletedCount = await StudentsDAO.verifyOneStudent(req.params.id)
+
+  if (deletedCount === 1) {
+    return res.json({ message: 'Successfully deleted student.' })
+  }
+
+  return res.json({
+    message: 'No students matched the query. Deleted 0 student.'
+  })
+})
+
 export default router

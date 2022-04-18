@@ -22,6 +22,10 @@ export default class UsersDAO {
     }
   }
 
+  /***************************************************************************
+   * READ METHODS
+   ***************************************************************************/
+
   /**
    * Finds a user in the `users` collection
    * @param {string} email - The email of the desired user
@@ -37,25 +41,50 @@ export default class UsersDAO {
     }
   }
 
+  /***************************************************************************
+   * UPDATE METHODS
+   ***************************************************************************/
+
   /**
    * @param {User} user
    * @returns {number} modifiedCount
    */
   static async updateOneUser (user: User) {
     try {
+      // omit the _id field from the user object
+      const { _id, ...rest } = user
+
       const result = await users.updateOne(
         {
           _id: new ObjectID(user._id)
         },
         {
           $set: {
-            email: user.email,
-            image: user.image,
-            name: user.name
+            ...rest
           }
         }
       )
       return result.modifiedCount
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /***************************************************************************
+   * DELETE METHODS
+   ***************************************************************************/
+  /**
+   * @param {string} userId
+   * @returns {number} deletedCount
+   */
+  static async deleteOneUser (userId: string) {
+    try {
+      const result = await users.deleteOne({
+        _id: new ObjectID(userId)
+      })
+
+      return result.deletedCount
     } catch (e) {
       console.error(e)
       return 0
