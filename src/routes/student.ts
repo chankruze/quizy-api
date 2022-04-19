@@ -11,37 +11,72 @@ import { Student } from '../types/student'
 
 const router = express.Router()
 
+/***************************************************************************
+ * GET ROUTES
+ **************************************************************************/
+
+/**
+ * Route serves all students
+ * @name get/all
+ */
+router.get('/all', async (req, res) => {
+  const students = await StudentsDAO.getAllStudents()
+
+  if (students) return res.json({ students })
+
+  return res.status(404).json({ students: null, message: 'No students found' })
+})
+
+/**
+ * Route serves all students
+ * @name get/all/verification/:verification
+ */
+router.get('/all/verification/:verification', async (req, res) => {
+  const students = await StudentsDAO.getAllStudentsByVerificationStatus(
+    req.params.verification
+  )
+
+  if (students) return res.json([...students])
+
+  return res.status(404).json({ students: null, message: 'No students found' })
+})
+
+/**
+ * Route serving a student by its id
+ * @name get/:id
+ */
+router.get('/:id', async (req, res) => {
+  const student = await StudentsDAO.getOneStudentByID(req.params.id)
+
+  if (student) return res.json({ student })
+
+  return res.status(404).json({ message: 'Student not found' })
+})
+
+/**
+ * Route serving a student by email
+ * @name get/email/:email
+ */
+router.get('/email/:email', async (req, res) => {
+  const student = await StudentsDAO.getOneStudentByEmail(req.params.email)
+
+  if (student) return res.json({ ...student })
+
+  return res.status(404).json({ message: 'Student not found' })
+})
+
 /**
  * Route serving a student by enrollment number
- * @name get/enrollment/:enrollmentNo
+ * @name get/registration/:registrationNo
  */
-router.get('/enrollment/:enrollmentNo', async (req, res) => {
+router.get('/registration/:registrationNo', async (req, res) => {
   const student = await StudentsDAO.getOneStudentByRegdNo(
-    req.params.enrollmentNo.toUpperCase() // convert to uppercase
+    req.params.registrationNo.toUpperCase() // convert to uppercase
   )
 
   if (student) return res.json({ student })
 
   return res.status(404).json({ students: null, message: 'Student not found' })
-})
-
-/**
- * Route serving a list of students by branch and semester
- * @name get/branch/:branch/semester/:semester
- */
-router.get('/branch/:branch/semester/:semester', async (req, res) => {
-  if (!req.params.branch || !req.params.semester) {
-    return res.status(400).json({ message: 'Invalid request' })
-  }
-
-  const students = await StudentsDAO.getAllStudentsByBranchAndSemester(
-    req.params.branch.toUpperCase(), // convert to uppercase
-    parseInt(req.params.semester) // convert to number
-  )
-
-  if (students) return res.json({ students })
-
-  return res.status(404).json({ students: null, message: 'No students found' })
 })
 
 /**
@@ -79,6 +114,29 @@ router.get('/semester/:semester', async (req, res) => {
 
   return res.status(404).json({ students: null, message: 'No students found' })
 })
+
+/**
+ * Route serving a list of students by branch and semester
+ * @name get/branch/:branch/semester/:semester
+ */
+router.get('/branch/:branch/semester/:semester', async (req, res) => {
+  if (!req.params.branch || !req.params.semester) {
+    return res.status(400).json({ message: 'Invalid request' })
+  }
+
+  const students = await StudentsDAO.getAllStudentsByBranchAndSemester(
+    req.params.branch.toUpperCase(), // convert to uppercase
+    parseInt(req.params.semester) // convert to number
+  )
+
+  if (students) return res.json({ students })
+
+  return res.status(404).json({ students: null, message: 'No students found' })
+})
+
+/***************************************************************************
+ * POST ROUTES
+ **************************************************************************/
 
 /**
  * Route creating a student from bio data
@@ -122,29 +180,9 @@ router.post('/new', async (req, res) => {
   }
 })
 
-/**
- * Route serving a student by its id
- * @name get/:id
- */
-router.get('/:id', async (req, res) => {
-  const student = await StudentsDAO.getOneStudentByID(req.params.id)
-
-  if (student) return res.json({ student })
-
-  return res.status(404).json({ message: 'Student not found' })
-})
-
-/**
- * Route serving a student by its email
- * @name get/email/:email
- */
-router.get('/email/:email', async (req, res) => {
-  const student = await StudentsDAO.getOneStudentByEmail(req.params.email)
-
-  if (student) return res.json({ ...student })
-
-  return res.status(404).json({ message: 'Student not found' })
-})
+/***************************************************************************
+ * UPDATE ROUTES
+ **************************************************************************/
 
 /**
  * Route updates a student's bio data by its id
@@ -165,7 +203,7 @@ router.put('/:id/biodata', async (req, res) => {
 })
 
 /**
- * Route updates a student's verification status by its id
+ * Route updates a student's verification status by id
  * @name put/:id/verify
  */
 router.put('/:id/verify', async (req, res) => {
@@ -185,11 +223,15 @@ router.put('/:id/verify', async (req, res) => {
   return res.status(404).json({ message: 'Student not found' })
 })
 
+/***************************************************************************
+ * DELETE ROUTES
+ **************************************************************************/
+
 /**
- * Route deletes a student by enrollment number
+ * Route deletes a student by id
  * @name delete/:id
  */
-router.put('/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const deletedCount = await StudentsDAO.deleteOneStudent(req.params.id)
 
   if (deletedCount === 1) {

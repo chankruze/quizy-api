@@ -30,6 +30,39 @@ export default class StudentsDAO {
    ***************************************************************************/
 
   /**
+   * @param {null}
+   * @returns {Array<Student> | []} students | []
+   */
+  static async getAllStudents () {
+    try {
+      const cursor = await students.find({})
+
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
+   * @param {string} verification
+   * @returns {Array<Student> | []} students | []
+   */
+  static async getAllStudentsByVerificationStatus (verification: string) {
+    try {
+      // Find students matching the "verification" parameter
+      const cursor = await students.find({
+        verification
+      })
+
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
    * @param {number} semester
    * @returns {Array<Student> | []} students | []
    */
