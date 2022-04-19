@@ -6,7 +6,7 @@ Copyright (c) geekofia 2022 and beyond
 */
 
 import { ObjectId } from 'bson'
-import { Student } from '../types/student'
+import { BioData, Student } from '../types/student'
 
 let students
 
@@ -101,14 +101,16 @@ export default class StudentsDAO {
   }
 
   /**
-   * @param {string} enrollmentNo
+   * @param {string} regdNo
    * @returns {Student | null} student | null
    */
-  static async getOneStudentByEnrollmentNo (enrollmentNo: string) {
+  static async getOneStudentByRegdNo (regdNo: string) {
     try {
       // Find a particular student matching the "enrollmentNo" parameter
       // project with all fields
-      return await students.findOne({ enrollmentNo })
+      return await students.findOne({
+        'bioData.regdNo': regdNo
+      })
     } catch (e) {
       console.error(e)
       return null
@@ -121,7 +123,9 @@ export default class StudentsDAO {
    */
   static async getOneStudentByEmail (email: string) {
     try {
-      return await students.findOne({ email })
+      return await students.findOne({
+        'bioData.email': email
+      })
     } catch (e) {
       console.error(e)
       return null
@@ -167,18 +171,15 @@ export default class StudentsDAO {
    * @param {Student} student
    * @returns {number} modifiedCount
    */
-  static async updateOneStudent (student: Student) {
+  static async updateBioData (userId: string, bioData: BioData) {
     try {
-      // omit the "_id" field from the student object
-      const { _id, ...rest } = student
-
       const result = await students.updateOne(
         {
-          _id: new ObjectId(_id)
+          _id: new ObjectId(userId)
         },
         {
           $set: {
-            ...rest
+            ...bioData
           }
         }
       )
@@ -193,7 +194,7 @@ export default class StudentsDAO {
    * @param {string} studentId
    * @returns {number} modifiedCount
    */
-  static async verifyOneStudent (studentId: string) {
+  static async updateVerificationStatus (studentId: string, status: boolean) {
     try {
       const result = await students.updateOne(
         {
@@ -201,7 +202,7 @@ export default class StudentsDAO {
         },
         {
           $set: {
-            status: 'verified'
+            verified: status
           }
         }
       )

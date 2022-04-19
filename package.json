@@ -1,7 +1,7 @@
 {
-  "name": "ed-tech-cms-api",
+  "name": "quizy-api",
   "version": "1.0.0",
-  "description": "CMS backend API for EdTech startup",
+  "description": "API server for quizy",
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
@@ -45,7 +45,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1",
     "morgan": "^1.10.0",
-    "nanoid": "^3.2.0",
+    "nanoid": "^3.3.2",
     "nodemailer": "^6.7.3"
   }
 }

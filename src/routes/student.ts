@@ -7,6 +7,7 @@ Copyright (c) geekofia 2022 and beyond
 
 import * as express from 'express'
 import StudentsDAO from '../dao/studentsDAO'
+import { Student } from '../types/student'
 
 const router = express.Router()
 
@@ -15,7 +16,7 @@ const router = express.Router()
  * @name get/enrollment/:enrollmentNo
  */
 router.get('/enrollment/:enrollmentNo', async (req, res) => {
-  const student = await StudentsDAO.getStudentByEnrollmentNo(
+  const student = await StudentsDAO.getOneStudentByRegdNo(
     req.params.enrollmentNo.toUpperCase() // convert to uppercase
   )
 
@@ -80,6 +81,48 @@ router.get('/semester/:semester', async (req, res) => {
 })
 
 /**
+ * Route creating a student from bio data
+ * @name post/new
+ */
+router.post('/new', async (req, res) => {
+  try {
+    const { regdNo } = req.body
+
+    if (!regdNo) {
+      return res
+        .status(400)
+        .json({ message: 'Registration number not provided' })
+    }
+
+    // find student by regdNo
+    const student: Student = await StudentsDAO.getOneStudentByRegdNo(regdNo)
+
+    if (!student) {
+      const _id = await StudentsDAO.addOneStudent({
+        bioData: { ...req.body },
+        verification: 'pending'
+      })
+
+      return res.status(201).json({
+        message: 'Bio data submited successfully & awaiting verification',
+        data: {
+          _id
+        }
+      })
+    }
+
+    return res.status(409).json({
+      message: `${regdNo} is already associated with ${student.bioData.name}`
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+      error: error.stack
+    })
+  }
+})
+
+/**
  * Route serving a student by its id
  * @name get/:id
  */
@@ -92,39 +135,62 @@ router.get('/:id', async (req, res) => {
 })
 
 /**
- * Route updates a student by its id
- * @name put/:id
+ * Route serving a student by its email
+ * @name get/email/:email
  */
-router.put('/:id', async (req, res) => {
-  const modifiedCount = await StudentsDAO.updateOneStudent(req.body)
+router.get('/email/:email', async (req, res) => {
+  const student = await StudentsDAO.getOneStudentByEmail(req.params.email)
+
+  if (student) return res.json({ ...student })
+
+  return res.status(404).json({ message: 'Student not found' })
+})
+
+/**
+ * Route updates a student's bio data by its id
+ * @name put/:id/biodata
+ */
+router.put('/:id/biodata', async (req, res) => {
+  if (!req.body.regdNo) {
+    return res.status(400).json({ message: 'Registration number not provided' })
+  }
+
+  const modifiedCount = await StudentsDAO.updateBioData(req.params.id, req.body)
 
   if (modifiedCount === 1) {
-    return res.json({ message: 'Student updated' })
+    return res.json({ message: 'Biodata updated' })
   }
 
   return res.status(404).json({ message: 'Student not found' })
 })
 
 /**
- * Route verifies a student by enrollment number
+ * Route updates a student's verification status by its id
  * @name put/:id/verify
  */
 router.put('/:id/verify', async (req, res) => {
-  const modifiedCount = await StudentsDAO.verifyOneStudent(req.params.id)
+  if (!req.body.verified) {
+    return res.status(400).json({ message: "verified status can't be empty" })
+  }
+
+  const modifiedCount = await StudentsDAO.updateVerificationStatus(
+    req.params.id,
+    req.body.verification
+  )
 
   if (modifiedCount === 1) {
-    return res.json({ message: 'Student verified' })
+    return res.json({ message: `Student ${req.body.verification}` })
   }
 
   return res.status(404).json({ message: 'Student not found' })
 })
 
 /**
- * Route verifies a student by enrollment number
+ * Route deletes a student by enrollment number
  * @name delete/:id
  */
 router.put('/:id', async (req, res) => {
-  const deletedCount = await StudentsDAO.verifyOneStudent(req.params.id)
+  const deletedCount = await StudentsDAO.deleteOneStudent(req.params.id)
 
   if (deletedCount === 1) {
     return res.json({ message: 'Successfully deleted student.' })
