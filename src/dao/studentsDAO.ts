@@ -212,7 +212,8 @@ export default class StudentsDAO {
         },
         {
           $set: {
-            ...bioData
+            bioData,
+            verification: 'pending'
           }
         }
       )
@@ -235,7 +236,7 @@ export default class StudentsDAO {
         },
         {
           $set: {
-            verified: status
+            verification: status
           }
         }
       )
