@@ -204,20 +204,26 @@ router.put('/:id/biodata', async (req, res) => {
 
 /**
  * Route updates a student's verification status by id
- * @name put/:id/verify
+ * @name put/:id/verification/:status
  */
-router.put('/:id/verify', async (req, res) => {
-  if (!req.body.verified) {
-    return res.status(400).json({ message: "verified status can't be empty" })
+router.put('/:id/verification/:status', async (req, res) => {
+  if (!req.params.status) {
+    return res.status(400).json({ message: 'verified status not provided' })
   }
 
   const modifiedCount = await StudentsDAO.updateVerificationStatus(
     req.params.id,
-    req.body.verification
+    req.params.status
   )
 
   if (modifiedCount === 1) {
-    return res.json({ message: `Student ${req.body.verification}` })
+    return res.json({ message: `Student ${req.params.status}` })
+  }
+
+  if (modifiedCount === 0) {
+    return res
+      .status(304)
+      .json({ message: `Student is already ${req.params.status}` })
   }
 
   return res.status(404).json({ message: 'Student not found' })
