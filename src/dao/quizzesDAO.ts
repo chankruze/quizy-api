@@ -75,6 +75,27 @@ export default class QuizzesDAO {
   }
 
   /**
+   * @param {string} semester
+   * @param {string} branch
+   * @returns {Array<Quiz> | []} quizzes | []
+   */
+  static async getAllQuizzesBySemesterAndBranch (
+    semester: string,
+    branch: string
+  ) {
+    try {
+      const cursor = await quizzes.find({
+        semester,
+        branch
+      })
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
    * @param {string} title
    * @returns {Array<Quiz> | []} quizzes | []
    */
@@ -156,6 +177,7 @@ export default class QuizzesDAO {
   /***************************************************************************
    * DELETE METHODS
    **************************************************************************/
+
   /**
    * @param {string} quizId
    * @returns {number} deletedCount
