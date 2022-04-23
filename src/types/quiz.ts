@@ -6,11 +6,13 @@ Copyright (c) geekofia 2022 and beyond
 */
 
 export type Option = {
+  id: string
   label: string
   value: string
 }
 
 export type Question = {
+  id: string
   title: string
   options: Array<Option>
   answer: string | number
