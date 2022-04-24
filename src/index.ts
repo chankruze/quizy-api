@@ -12,6 +12,7 @@ import { banner } from './utils'
 import StudentsDAO from './dao/studentsDAO'
 import QuizzesDAO from './dao/quizzesDAO'
 import UsersDAO from './dao/usersDAO'
+import SubmissionsDAO from './dao/submissionsDAO'
 
 // import env variables
 dotenv.config()
@@ -45,10 +46,10 @@ if (!process.env.DB_URI) {
     })
     .then(async (client) => {
       console.log('Connected to MongoDB 🔥🔥🔥')
-      // TODO: inject mongo client
       await StudentsDAO.injectDB(client)
       await QuizzesDAO.injectDB(client)
       await UsersDAO.injectDB(client)
+      await SubmissionsDAO.injectDB(client)
       // start listening on port
       app.listen(port, banner(port)).on('error', (err) => {
         if (err.message.includes('EADDRINUSE')) {
