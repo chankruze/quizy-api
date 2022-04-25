@@ -48,9 +48,9 @@ router.get('/all/verification/:verification', async (req, res) => {
 router.get('/:id', async (req, res) => {
   const student = await StudentsDAO.getOneStudentByID(req.params.id)
 
-  if (student) return res.json({ student })
+  if (student) return res.json(student)
 
-  return res.status(404).json({ message: 'Student not found' })
+  return res.status(404).json({ message: 'Student not found', student: null })
 })
 
 /**
@@ -60,9 +60,9 @@ router.get('/:id', async (req, res) => {
 router.get('/email/:email', async (req, res) => {
   const student = await StudentsDAO.getOneStudentByEmail(req.params.email)
 
-  if (student) return res.json({ ...student })
+  if (student) return res.json(student)
 
-  return res.status(404).json({ message: 'Student not found' })
+  return res.status(404).json({ message: 'Student not found', student: null })
 })
 
 /**

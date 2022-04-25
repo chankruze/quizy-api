@@ -48,10 +48,7 @@ router.get('/:submissionId', async (req, res) => {
       req.params.submissionId
     )
 
-    return res.json({
-      message: 'Submission fetched successfully',
-      submission
-    })
+    return res.json(submission)
   } catch (error) {
     return res.status(500).json({
       message: 'Error fetching submission',
