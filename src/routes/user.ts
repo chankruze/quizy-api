@@ -39,7 +39,8 @@ router.put('/:email', async (req, res) => {
     if (modifiedCount === 1) {
       return res.json({ message: 'User updated' })
     }
-    return res.status(500).json({ message: 'User not updated' })
+
+    return res.json({ message: 'User already updated' })
   }
 
   return res.status(404).json({ message: 'User not found' })
