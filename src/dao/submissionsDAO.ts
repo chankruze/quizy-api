@@ -61,12 +61,41 @@ export default class SubmissionsDAO {
   }
 
   /**
+   * @param {string} studentId
+   * @returns {Array<Submission> | []} submissions | []
+   */
+  static async getAllSubmissionsOfAStudent (studentId: string) {
+    try {
+      const cursor = await submissions.find({ studentId })
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
    * @param {string} submissionId
    * @returns {Submission> | null} submission | null
    */
-  static async getOneSubmission (submissionId: string) {
+  static async getOneSubmissionByID (submissionId: string) {
     try {
       return await submissions.findOne({ _id: new ObjectId(submissionId) })
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
+   * @param {string} quizId
+   * @param {string} studentId
+   * @returns {Array<Submission> | []} submissions | []
+   */
+  static async getAllSubmissionsByQuizAndStudentID (quizId: string, studentId: string) {
+    try {
+      const cursor = await submissions.find({ studentId, quizId })
+      return cursor.toArray()
     } catch (e) {
       console.error(e)
       return []
