@@ -43,6 +43,19 @@ export default class QuizzesDAO {
   }
 
   /**
+   * @param {null}
+   * @returns {number} quizzes count
+   */
+  static async countAllQuizzes () {
+    try {
+      return await quizzes.countDocuments({})
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /**
    * @param {number} semester
    * @returns {Array<Quiz> | []} quizzes | []
    */

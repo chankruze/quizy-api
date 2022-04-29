@@ -45,6 +45,19 @@ export default class StudentsDAO {
   }
 
   /**
+   * @param {null}
+   * @returns {number} students count
+   */
+  static async countAllStudents () {
+    try {
+      return await students.countDocuments({})
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /**
    * @param {string} verification
    * @returns {Array<Student> | []} students | []
    */
@@ -59,6 +72,22 @@ export default class StudentsDAO {
     } catch (e) {
       console.error(e)
       return []
+    }
+  }
+
+  /**
+   * @param {string} status
+   * @returns {number} students count
+   */
+  static async countAllStudentsByVerificationStatus (status: string) {
+    try {
+      // Find students matching the "verification" parameter
+      return await students.countDocuments({
+        verification: status
+      })
+    } catch (e) {
+      console.error(e)
+      return 0
     }
   }
 

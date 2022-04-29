@@ -107,4 +107,24 @@ router.get('/quiz/:quizId/student/:studentId', async (req, res) => {
     })
   }
 })
+
+/**
+ * Route serving total submissions count by email
+ * @name get/all/count
+ */
+router.get('/all/count', async (req, res) => {
+  try {
+    const count = await SubmissionsDAO.countAllSubmissions()
+
+    res.status(200).json({
+      count
+    })
+  } catch (e) {
+    res.status(500).json({
+      message: 'Error fetching submission count',
+      error: e
+    })
+  }
+})
+
 export default router

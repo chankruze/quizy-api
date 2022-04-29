@@ -32,6 +32,10 @@ router.get('/all', async (req, res) => {
  * @name get/all/verification/:verification
  */
 router.get('/all/verification/:verification', async (req, res) => {
+  if (!req.params.verification) {
+    return res.status(400).json({ message: 'Verification status is required' })
+  }
+
   const students = await StudentsDAO.getAllStudentsByVerificationStatus(
     req.params.verification
   )
@@ -39,6 +43,33 @@ router.get('/all/verification/:verification', async (req, res) => {
   if (students) return res.json([...students])
 
   return res.status(404).json({ students: null, message: 'No students found' })
+})
+
+/**
+ * Route serves all students count by verification status
+ * @name get/all/:verification/count
+ */
+router.get('/all/:verification/count', async (req, res) => {
+  if (!req.params.verification) {
+    return res.status(400).json({ message: 'Verification status is required' })
+  }
+
+  if (req.params.verification === 'all') {
+    return await StudentsDAO.countAllStudents()
+  }
+
+  try {
+    const count = await StudentsDAO.countAllStudentsByVerificationStatus(
+      req.params.verification
+    )
+
+    return res.json({ count })
+  } catch (e) {
+    return res.status(500).json({
+      message: 'Error fetching students count',
+      error: e
+    })
+  }
 })
 
 /**

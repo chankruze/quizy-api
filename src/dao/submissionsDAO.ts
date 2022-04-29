@@ -47,10 +47,23 @@ export default class SubmissionsDAO {
    **************************************************************************/
 
   /**
+   * @param {null}
+   * @returns {number} submission count
+   */
+  static async countAllSubmissions () {
+    try {
+      return await submissions.countDocuments({})
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
+
+  /**
    * @param {string} quizId
    * @returns {Array<Submission> | []} submissions | []
    */
-  static async getAllSubmissions (quizId: string) {
+  static async getAllSubmissionsOfAQuiz (quizId: string) {
     try {
       const cursor = await submissions.find({ quizId })
       return cursor.toArray()
@@ -92,7 +105,10 @@ export default class SubmissionsDAO {
    * @param {string} studentId
    * @returns {Array<Submission> | []} submissions | []
    */
-  static async getAllSubmissionsByQuizAndStudentID (quizId: string, studentId: string) {
+  static async getAllSubmissionsByQuizAndStudentID (
+    quizId: string,
+    studentId: string
+  ) {
     try {
       const cursor = await submissions.find({ studentId, quizId })
       return cursor.toArray()

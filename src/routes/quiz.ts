@@ -111,6 +111,19 @@ router.get('/all/semester/:semester/branch/:branch', async (req, res) => {
   }
 })
 
+router.get('/all/count', async (req, res) => {
+  try {
+    const count = await QuizzesDAO.countAllQuizzes()
+
+    res.status(200).json({ count })
+  } catch (e) {
+    res.status(500).json({
+      message: 'Error fetching quizzes count',
+      error: e
+    })
+  }
+})
+
 /***************************************************************************
  * UPDATE ROUTES
  **************************************************************************/
