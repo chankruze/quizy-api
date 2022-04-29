@@ -43,6 +43,28 @@ export default class QuizzesDAO {
   }
 
   /**
+   * @param {number} count
+   * @returns {Array<Quiz> | []} quizzes | []
+   */
+  static async getUpcomingQuizzes (count: number = 5) {
+    try {
+      const cursor = await quizzes
+        .find(
+          {},
+          {
+            projection: { description: 0, questions: 0 }
+          }
+        )
+        .sort({ date: -1 })
+        .limit(count)
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
    * @param {null}
    * @returns {number} quizzes count
    */

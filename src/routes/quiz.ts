@@ -124,6 +124,24 @@ router.get('/all/count', async (req, res) => {
   }
 })
 
+/**
+ * Route serves x upcoming quizzes
+ * @name get/upcoming/:count
+ */
+router.get('/upcoming/:count', async (req, res) => {
+  try {
+    const quizzes = await QuizzesDAO.getUpcomingQuizzes(
+      parseInt(req.params.count)
+    )
+    res.status(200).json([...quizzes])
+  } catch (e) {
+    res.status(500).json({
+      message: 'Error fetching quizzes count',
+      error: e
+    })
+  }
+})
+
 /***************************************************************************
  * UPDATE ROUTES
  **************************************************************************/
