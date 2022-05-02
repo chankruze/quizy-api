@@ -121,22 +121,24 @@ export default class SubmissionsDAO {
     }
   }
 
-  // /**
-  //  * @param {string} quizId
-  //  * @param {string} studentId
-  //  * @returns {Array<Submission> | []} submissions | []
-  //  */
-  // static async getAllSubmissionsByQuizAndStudentID (
-  //   quizId: string,
-  //   studentId: string
-  // ) {
-  //   try {
-  //     const cursor = await submissions.find({ studentId, quizId }).sort({ date: -1 })
-  //
-  //     return cursor.toArray()
-  //   } catch (e) {
-  //     console.error(e)
-  //     return []
-  //   }
-  // }
+  /**
+   * @param {string} quizId
+   * @param {string} studentId
+   * @returns {Array<Submission> | []} submissions | []
+   */
+  static async getAllSubmissionsByQuizAndStudentID (
+    quizId: string,
+    studentId: string
+  ) {
+    try {
+      const cursor = await submissions
+        .find({ studentId, quizId })
+        .sort({ date: -1 })
+
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
 }

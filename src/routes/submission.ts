@@ -83,30 +83,30 @@ router.get('/student/:studentId', async (req, res) => {
   }
 })
 
-// router.get('/quiz/:quizId/student/:studentId', async (req, res) => {
-//   try {
-//     if (!req.params.quizId) {
-//       throw new Error('Quiz ID not provided')
-//     }
+router.get('/quiz/:quizId/student/:studentId', async (req, res) => {
+  try {
+    if (!req.params.quizId) {
+      throw new Error('Quiz ID not provided')
+    }
 
-//     if (!req.params.studentId) {
-//       throw new Error('Student ID not provided')
-//     }
+    if (!req.params.studentId) {
+      throw new Error('Student ID not provided')
+    }
 
-//     const submissions =
-//       await SubmissionsDAO.getAllSubmissionsByQuizAndStudentID(
-//         req.params.quizId,
-//         req.params.studentId
-//       )
+    const submissions =
+      await SubmissionsDAO.getAllSubmissionsByQuizAndStudentID(
+        req.params.quizId,
+        req.params.studentId
+      )
 
-//     return res.json(submissions)
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: 'Error fetching submission',
-//       error: error.message
-//     })
-//   }
-// })
+    return res.json(submissions)
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error fetching submission',
+      error: error.message
+    })
+  }
+})
 
 router.get('/quiz/:quizId', async (req, res) => {
   try {
