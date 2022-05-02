@@ -6,6 +6,7 @@ Copyright (c) geekofia 2022 and beyond
 */
 
 import { ObjectId } from 'bson'
+import { Submission } from '../types/submission'
 
 let submissions
 
@@ -32,7 +33,7 @@ export default class SubmissionsDAO {
    * @param {Submission} submission
    * @returns {Array<Submission> | []} submissions | []
    */
-  static async addOneSubmission (submission) {
+  static async addOneSubmission (submission: Submission) {
     try {
       const doc = await submissions.insertOne(submission)
       return doc.insertedId
@@ -61,11 +62,21 @@ export default class SubmissionsDAO {
 
   /**
    * @param {string} quizId
-   * @returns {Array<Submission> | []} submissions | []
+   * @returns {Array<MinifiedSubmission> | []} submissions | []
    */
   static async getAllSubmissionsOfAQuiz (quizId: string) {
     try {
-      const cursor = await submissions.find({ quizId })
+      const cursor = await submissions
+        .find(
+          { quizId },
+          {
+            projection: {
+              answers: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
+
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -75,11 +86,21 @@ export default class SubmissionsDAO {
 
   /**
    * @param {string} studentId
-   * @returns {Array<Submission> | []} submissions | []
+   * @returns {Array<MinifiedSubmission> | []} submissions | []
    */
   static async getAllSubmissionsOfAStudent (studentId: string) {
     try {
-      const cursor = await submissions.find({ studentId })
+      const cursor = await submissions
+        .find(
+          { studentId },
+          {
+            projection: {
+              answers: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
+
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -89,7 +110,7 @@ export default class SubmissionsDAO {
 
   /**
    * @param {string} submissionId
-   * @returns {Submission> | null} submission | null
+   * @returns {<Submission> | null} submission | null
    */
   static async getOneSubmissionByID (submissionId: string) {
     try {
@@ -100,21 +121,22 @@ export default class SubmissionsDAO {
     }
   }
 
-  /**
-   * @param {string} quizId
-   * @param {string} studentId
-   * @returns {Array<Submission> | []} submissions | []
-   */
-  static async getAllSubmissionsByQuizAndStudentID (
-    quizId: string,
-    studentId: string
-  ) {
-    try {
-      const cursor = await submissions.find({ studentId, quizId })
-      return cursor.toArray()
-    } catch (e) {
-      console.error(e)
-      return []
-    }
-  }
+  // /**
+  //  * @param {string} quizId
+  //  * @param {string} studentId
+  //  * @returns {Array<Submission> | []} submissions | []
+  //  */
+  // static async getAllSubmissionsByQuizAndStudentID (
+  //   quizId: string,
+  //   studentId: string
+  // ) {
+  //   try {
+  //     const cursor = await submissions.find({ studentId, quizId }).sort({ date: -1 })
+  //
+  //     return cursor.toArray()
+  //   } catch (e) {
+  //     console.error(e)
+  //     return []
+  //   }
+  // }
 }

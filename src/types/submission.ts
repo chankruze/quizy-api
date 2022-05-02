@@ -16,3 +16,10 @@ export type Submission = {
   answers: Answer
   date: string
 }
+
+export type MinifiedSubmission = {
+  _id?: string
+  quizId: string
+  studentId: string
+  date: string
+}
