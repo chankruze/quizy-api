@@ -27,3 +27,11 @@ export type Quiz = {
   date: string
   questions: Array<Question>
 }
+
+export type MinifiedQuiz = {
+  _id: string
+  title: string
+  branch: string
+  semester: string
+  date: string
+}

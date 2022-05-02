@@ -46,10 +46,20 @@ router.get('/all', async (req, res) => {
   try {
     const quizzes = await QuizzesDAO.getAllQuizzes()
 
-    res.status(200).json({
-      message: 'Quizzes fetched successfully',
-      quizzes
+    res.status(200).json(quizzes)
+  } catch (e) {
+    res.status(500).json({
+      message: 'Error fetching quizzes',
+      error: e
     })
+  }
+})
+
+router.get('/all/minified', async (req, res) => {
+  try {
+    const quizzes = await QuizzesDAO.getAllMinifiedQuizzes()
+
+    res.status(200).json(quizzes)
   } catch (e) {
     res.status(500).json({
       message: 'Error fetching quizzes',
@@ -99,10 +109,7 @@ router.get('/all/semester/:semester/branch/:branch', async (req, res) => {
       req.params.branch
     )
 
-    return res.status(200).json({
-      message: `Quizzes for ${req.params.semester}th semester ${req.params.branch} branch are fetched successfully`,
-      quizzes
-    })
+    return res.status(200).json(quizzes)
   } catch (e) {
     return res.status(500).json({
       message: 'Error fetching quiz',
@@ -133,7 +140,7 @@ router.get('/upcoming/:count', async (req, res) => {
     const quizzes = await QuizzesDAO.getUpcomingQuizzes(
       parseInt(req.params.count)
     )
-    res.status(200).json([...quizzes])
+    res.status(200).json(quizzes)
   } catch (e) {
     res.status(500).json({
       message: 'Error fetching quizzes count',

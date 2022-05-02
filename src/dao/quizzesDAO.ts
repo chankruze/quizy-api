@@ -34,7 +34,31 @@ export default class QuizzesDAO {
    */
   static async getAllQuizzes () {
     try {
-      const cursor = await quizzes.find({})
+      const cursor = await quizzes.find({}).sort({ date: -1 })
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
+   * @param {null}
+   * @returns {Array<MinifiedQuiz> | []} quizzes | []
+   */
+  static async getAllMinifiedQuizzes () {
+    try {
+      const cursor = await quizzes
+        .find(
+          {},
+          {
+            projection: {
+              questions: 0,
+              description: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -44,7 +68,7 @@ export default class QuizzesDAO {
 
   /**
    * @param {number} count
-   * @returns {Array<Quiz> | []} quizzes | []
+   * @returns {Array<MinifiedQuiz> | []} quizzes | []
    */
   static async getUpcomingQuizzes (count: number = 5) {
     try {
@@ -79,13 +103,23 @@ export default class QuizzesDAO {
 
   /**
    * @param {number} semester
-   * @returns {Array<Quiz> | []} quizzes | []
+   * @returns {Array<MinifiedQuiz> | []} quizzes | []
    */
   static async getAllQuizzesBySemester (semester: number) {
     try {
-      const cursor = await quizzes.find({
-        semester
-      })
+      const cursor = await quizzes
+        .find(
+          {
+            semester
+          },
+          {
+            projection: {
+              questions: 0,
+              description: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -95,13 +129,23 @@ export default class QuizzesDAO {
 
   /**
    * @param {string} branch
-   * @returns {Array<Quiz> | []} quizzes | []
+   * @returns {Array<MinifiedQuiz> | []} quizzes | []
    */
   static async getAllQuizzesByBranch (branch: string) {
     try {
-      const cursor = await quizzes.find({
-        branch
-      })
+      const cursor = await quizzes
+        .find(
+          {
+            branch
+          },
+          {
+            projection: {
+              questions: 0,
+              description: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -112,17 +156,27 @@ export default class QuizzesDAO {
   /**
    * @param {string} semester
    * @param {string} branch
-   * @returns {Array<Quiz> | []} quizzes | []
+   * @returns {Array<MinifiedQuiz> | []} quizzes | []
    */
   static async getAllQuizzesBySemesterAndBranch (
     semester: string,
     branch: string
   ) {
     try {
-      const cursor = await quizzes.find({
-        semester,
-        branch
-      })
+      const cursor = await quizzes
+        .find(
+          {
+            semester,
+            branch
+          },
+          {
+            projection: {
+              questions: 0,
+              description: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -132,13 +186,23 @@ export default class QuizzesDAO {
 
   /**
    * @param {string} title
-   * @returns {Array<Quiz> | []} quizzes | []
+   * @returns {Array<MinifiedQuiz> | []} quizzes | []
    */
   static async getAllQuizzesByTitle (title: string) {
     try {
-      const cursor = await quizzes.find({
-        title
-      })
+      const cursor = await quizzes
+        .find(
+          {
+            title
+          },
+          {
+            projection: {
+              questions: 0,
+              description: 0
+            }
+          }
+        )
+        .sort({ date: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
