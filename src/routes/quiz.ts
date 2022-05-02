@@ -75,6 +75,26 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/:id/minified', async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(400).send({
+        message: 'Invalid request',
+        error: "id can't be empty"
+      })
+    }
+
+    const quiz = await QuizzesDAO.getOneMinifiedQuizByID(req.params.id)
+
+    return res.status(200).json(quiz)
+  } catch (e) {
+    return res.status(500).json({
+      message: 'Error fetching quiz',
+      error: e
+    })
+  }
+})
+
 router.get('/all/semester/:semester/branch/:branch', async (req, res) => {
   try {
     if (!req.params.semester) {

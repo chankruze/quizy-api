@@ -211,6 +211,29 @@ export default class QuizzesDAO {
     }
   }
 
+  /**
+   * @param {string} quizId
+   * @returns {MinifiedQuiz | null} quiz | null
+   */
+  static async getOneMinifiedQuizByID (quizId: string) {
+    try {
+      return await quizzes.findOne(
+        {
+          _id: new ObjectId(quizId)
+        },
+        {
+          projection: {
+            questions: 0,
+            description: 0
+          }
+        }
+      )
+    } catch (e) {
+      console.error(e)
+      return null
+    }
+  }
+
   /***************************************************************************
    * CREATE METHODS
    **************************************************************************/
