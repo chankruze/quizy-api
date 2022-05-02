@@ -200,7 +200,7 @@ export default class StudentsDAO {
    */
   static async getOneStudentByID (studentId: string) {
     try {
-      return await students.findOne({ _id: studentId })
+      return await students.findOne({ _id: new ObjectId(studentId) })
     } catch (e) {
       console.error(e)
       return null
