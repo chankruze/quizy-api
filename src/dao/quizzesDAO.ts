@@ -34,20 +34,6 @@ export default class QuizzesDAO {
    */
   static async getAllQuizzes () {
     try {
-      const cursor = await quizzes.find({}).sort({ date: -1 })
-      return cursor.toArray()
-    } catch (e) {
-      console.error(e)
-      return []
-    }
-  }
-
-  /**
-   * @param {null}
-   * @returns {Array<MinifiedQuiz> | []} quizzes | []
-   */
-  static async getAllMinifiedQuizzes () {
-    try {
       const cursor = await quizzes
         .find(
           {},

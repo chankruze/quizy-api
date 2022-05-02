@@ -55,19 +55,6 @@ router.get('/all', async (req, res) => {
   }
 })
 
-router.get('/all/minified', async (req, res) => {
-  try {
-    const quizzes = await QuizzesDAO.getAllMinifiedQuizzes()
-
-    res.status(200).json(quizzes)
-  } catch (e) {
-    res.status(500).json({
-      message: 'Error fetching quizzes',
-      error: e
-    })
-  }
-})
-
 router.get('/:id', async (req, res) => {
   try {
     if (!req.params.id) {
