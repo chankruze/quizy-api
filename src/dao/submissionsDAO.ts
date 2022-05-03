@@ -62,9 +62,24 @@ export default class SubmissionsDAO {
 
   /**
    * @param {string} quizId
-   * @returns {Array<MinifiedSubmission> | []} submissions | []
+   * @returns {Array<Submission> | []} submissions | []
    */
   static async getAllSubmissionsOfAQuiz (quizId: string) {
+    try {
+      const cursor = await submissions.find({ quizId }).sort({ date: -1 })
+
+      return cursor.toArray()
+    } catch (e) {
+      console.error(e)
+      return []
+    }
+  }
+
+  /**
+   * @param {string} quizId
+   * @returns {Array<MinifiedSubmission> | []} submissions | []
+   */
+  static async getAllMinifiedSubmissionsOfAQuiz (quizId: string) {
     try {
       const cursor = await submissions
         .find(

@@ -127,6 +127,25 @@ router.get('/quiz/:quizId', async (req, res) => {
   }
 })
 
+router.get('/quiz/:quizId/minified', async (req, res) => {
+  try {
+    if (!req.params.quizId) {
+      throw new Error('Quiz ID not provided')
+    }
+
+    const quizzes = await SubmissionsDAO.getAllMinifiedSubmissionsOfAQuiz(
+      req.params.quizId
+    )
+
+    return res.status(201).json(quizzes)
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error submitting quiz',
+      error: error.message
+    })
+  }
+})
+
 /**
  * Route serving total submissions count by email
  * @name get/all/count
