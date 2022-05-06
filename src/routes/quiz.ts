@@ -7,6 +7,8 @@ Copyright (c) geekofia 2022 and beyond
 
 import * as express from 'express'
 import QuizzesDAO from '../dao/quizzesDAO'
+import StudentsDAO from '../dao/studentsDAO'
+import { sendQuizNotification } from '../utils/sendQuizNotification'
 
 const router = express.Router()
 
@@ -33,6 +35,43 @@ router.post('/new', async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: 'Error adding lesson',
+      error: error.message
+    })
+  }
+})
+
+router.post('/:id/notify', async (req, res) => {
+  try {
+    if (!req.params.id) {
+      return res.status(400).send({
+        message: 'Invalid request',
+        error: "quiz id can't be empty"
+      })
+    }
+
+    const quiz = await QuizzesDAO.getOneMinifiedQuizByID(req.params.id)
+    const students = await StudentsDAO.getAllStudentsByBranchAndSemester(
+      quiz.branch,
+      quiz.semester,
+      {
+        _id: 0,
+        email: '$bioData.email'
+      }
+    )
+
+    // convert students object list to email array
+    const recipients = students.map((student) => student.email)
+
+    // send email to students
+    await sendQuizNotification(recipients, quiz)
+
+    return res.status(201).json({
+      message: 'Quiz notification sent successfully'
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      message: 'Error sending quiz notification',
       error: error.message
     })
   }

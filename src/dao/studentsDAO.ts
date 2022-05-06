@@ -31,11 +31,12 @@ export default class StudentsDAO {
 
   /**
    * @param {null}
+   * @param {any} projection
    * @returns {Array<Student> | []} students | []
    */
-  static async getAllStudents () {
+  static async getAllStudents (projection?: any) {
     try {
-      const cursor = await students.find({})
+      const cursor = await students.find({}, { projection })
 
       return cursor.toArray()
     } catch (e) {
@@ -59,14 +60,16 @@ export default class StudentsDAO {
 
   /**
    * @param {string} verification
+   * @param {any} projection
    * @returns {Array<Student> | []} students | []
    */
-  static async getAllStudentsByVerificationStatus (verification: string) {
+  static async getAllStudentsByVerificationStatus (
+    verification: string,
+    projection?: any
+  ) {
     try {
       // Find students matching the "verification" parameter
-      const cursor = await students.find({
-        verification
-      })
+      const cursor = await students.find({ verification }, { projection })
 
       return cursor.toArray()
     } catch (e) {
@@ -92,18 +95,16 @@ export default class StudentsDAO {
   }
 
   /**
-   * @param {number} semester
+   * @param {string} semester
+   * @param {any} projection
    * @returns {Array<Student> | []} students | []
    */
-  static async getAllStudentsBySemester (semester: number) {
+  static async getAllStudentsBySemester (semester: string, projection?: any) {
     try {
       // Find students matching the "semester" parameter
-      // project only the "name", "enrollmentNo" and "email" fields
       const cursor = await students.find(
-        {
-          semester
-        },
-        { projection: { _id: 0, semester: 0 } }
+        { 'bioData.semester': semester },
+        { projection }
       )
 
       return cursor.toArray()
@@ -115,17 +116,15 @@ export default class StudentsDAO {
 
   /**
    * @param {string} branch
+   * @param {any} projection
    * @returns {Array<Student> | []} students | []
    */
-  static async getAllStudentsByBranch (branch: string) {
+  static async getAllStudentsByBranch (branch: string, projection?: any) {
     try {
       // Find students matching the "branch" parameter
-      // project only the "name", "enrollmentNo" and "email" fields
       const cursor = await students.find(
-        {
-          branch
-        },
-        { projection: { _id: 0, branch: 0 } }
+        { 'bioData.branch': branch },
+        { projection }
       )
 
       return cursor.toArray()
@@ -137,22 +136,23 @@ export default class StudentsDAO {
 
   /**
    * @param {string} branch
-   * @param {number} semester
+   * @param {string} semester
+   * @param {any} projection
    * @returns {Array<Student> | []} students | []
    */
   static async getAllStudentsByBranchAndSemester (
     branch: string,
-    semester: number
+    semester: string,
+    projection?: any
   ) {
     try {
       // Find students matching the "semester" and "branch" parameter
-      // project only the "name", "enrollmentNo" and "email" fields
       const cursor = await students.find(
         {
-          branch,
-          semester
+          'bioData.branch': branch,
+          'bioData.semester': semester
         },
-        { projection: { _id: 0, branch: 0, semester: 0 } }
+        { projection }
       )
 
       return cursor.toArray()
@@ -164,15 +164,17 @@ export default class StudentsDAO {
 
   /**
    * @param {string} regdNo
+   * @param {any} projection
    * @returns {Student | null} student | null
    */
-  static async getOneStudentByRegdNo (regdNo: string) {
+  static async getOneStudentByRegdNo (regdNo: string, projection?: any) {
     try {
       // Find a particular student matching the "enrollmentNo" parameter
       // project with all fields
-      return await students.findOne({
-        'bioData.regdNo': regdNo
-      })
+      return await students.findOne(
+        { 'bioData.regdNo': regdNo },
+        { projection }
+      )
     } catch (e) {
       console.error(e)
       return null
@@ -181,13 +183,12 @@ export default class StudentsDAO {
 
   /**
    * @param {string} email
+   * @param {any} projection
    * @returns {Student | null} student | null
    */
-  static async getOneStudentByEmail (email: string) {
+  static async getOneStudentByEmail (email: string, projection?: any) {
     try {
-      return await students.findOne({
-        'bioData.email': email
-      })
+      return await students.findOne({ 'bioData.email': email }, { projection })
     } catch (e) {
       console.error(e)
       return null
@@ -196,11 +197,15 @@ export default class StudentsDAO {
 
   /**
    * @param {string} studentId
+   * @param {any} projection
    * @returns {Student | null} student | null
    */
-  static async getOneStudentByID (studentId: string) {
+  static async getOneStudentByID (studentId: string, projection?: any) {
     try {
-      return await students.findOne({ _id: new ObjectId(studentId) })
+      return await students.findOne(
+        { _id: new ObjectId(studentId) },
+        { projection }
+      )
     } catch (e) {
       console.error(e)
       return null

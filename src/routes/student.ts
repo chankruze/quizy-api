@@ -138,7 +138,7 @@ router.get('/semester/:semester', async (req, res) => {
   }
 
   const students = await StudentsDAO.getAllStudentsBySemester(
-    parseInt(req.params.semester) // convert to number
+    req.params.semester
   )
 
   if (students) return res.json({ students })
@@ -157,10 +157,14 @@ router.get('/branch/:branch/semester/:semester', async (req, res) => {
 
   const students = await StudentsDAO.getAllStudentsByBranchAndSemester(
     req.params.branch.toUpperCase(), // convert to uppercase
-    parseInt(req.params.semester) // convert to number
+    req.params.semester,
+    {
+      _id: 0,
+      email: '$bioData.email'
+    }
   )
 
-  if (students) return res.json({ students })
+  if (students) return res.json(students)
 
   return res.status(404).json({ students: null, message: 'No students found' })
 })

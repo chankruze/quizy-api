@@ -1,0 +1,128 @@
+<!--
+Author: chankruze (chankruze@gmail.com)
+Created: Fri May 06 2022 20:12:01 GMT+0530 (India Standard Time)
+
+Copyright (c) geekofia 2022 and beyond
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito&family=Open+Sans&family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body
+    style="
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      color: black;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+      background-color: #e1e9f0;
+    "
+  >
+    <div style="background-color: white; max-width: 600px; margin: auto">
+      <!-- top hader -->
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          padding: 24px 0;
+          background-color: #3c4151;
+        "
+      >
+        <img
+          src="https://i.ibb.co/nzkv0pR/logo-vercel.png"
+          alt="logo"
+          style="padding: 0; margin: auto; margin-right: 0; height: 48px"
+        />
+        <p
+          style="
+            padding: 0;
+            margin: auto;
+            margin-left: 0;
+            font-size: 32px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+          "
+        >
+          Quizy
+        </p>
+      </div>
+      <!-- body -->
+      <div style="padding: 16px">
+        <p style="padding: 4px 0; margin: 0; padding-bottom: 16px">
+          Hi 👋<br />
+          You have a quiz to attend on {{date}}!<br /><br />
+          Get ready to rock ❤️
+        </p>
+        <div
+          style="
+            padding: 8px;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+          "
+        >
+          <p style="padding: 4px 0; margin: 0">
+            <span style="font-weight: 600">Title:</span> {{title}}
+          </p>
+          <p style="padding: 4px 0; margin: 0">
+            <span style="font-weight: 600">Date:</span> {{date}}
+          </p>
+          <p style="padding: 4px 0; margin: 0">
+            <span style="font-weight: 600">Marks:</span> {{marks}}
+          </p>
+          <p style="padding: 4px 0; margin: 0">
+            <span style="font-weight: 600">Semester:</span> {{semester}}
+          </p>
+          <p style="padding: 4px 0; margin: 0">
+            <span style="font-weight: 600">Branch:</span> {{branch}}
+          </p>
+        </div>
+        <div style="display: flex; padding: 16px 0">
+          <a
+            href="{{{url}}}"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              padding: 16px 24px;
+              margin: auto;
+              background-color: #3b82f6;
+              border-radius: 8px;
+              color: white;
+              text-decoration: none;
+              font-size: large;
+              font-family: 'Poppins', sans-serif;
+            "
+          >
+            Attend Quiz</a
+          >
+        </div>
+      </div>
+      <!-- footer -->
+      <div style="padding: 16px">
+        <p
+          style="
+            padding: 4px 0;
+            margin: 0;
+            color: #ff3535;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            text-align: center;
+          "
+        >
+          💡Important: To appear in a quiz, your bio-data needs to be verified.
+          If you have already submitted your bio-data and its verification is
+          still pending, contact the authority.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

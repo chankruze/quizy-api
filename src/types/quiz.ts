@@ -26,6 +26,7 @@ export type Quiz = {
   semester: string
   date: string
   questions: Array<Question>
+  questionsCount?: number
 }
 
 export type MinifiedQuiz = {
