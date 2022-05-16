@@ -18,13 +18,20 @@ export type Question = {
   answer: string | number
 }
 
+export type MinifiedQuestion = {
+  id: string
+  title: string
+  options: Array<Option>
+}
+
 export type Quiz = {
   _id: string
   title: string
   description: string
   branch: string
   semester: string
-  date: string
+  startDate: string
+  endDate: string
   questions: Array<Question>
   questionsCount?: number
 }
@@ -34,5 +41,6 @@ export type MinifiedQuiz = {
   title: string
   branch: string
   semester: string
-  date: string
+  date: Date
+  questionsCount?: number
 }

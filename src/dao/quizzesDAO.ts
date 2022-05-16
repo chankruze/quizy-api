@@ -44,7 +44,7 @@ export default class QuizzesDAO {
             }
           }
         )
-        .sort({ date: -1 })
+        .sort({ startDate: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -65,7 +65,7 @@ export default class QuizzesDAO {
             projection: { description: 0, questions: 0 }
           }
         )
-        .sort({ date: -1 })
+        .sort({ startDate: -1 })
         .limit(count)
       return cursor.toArray()
     } catch (e) {
@@ -105,7 +105,7 @@ export default class QuizzesDAO {
             }
           }
         )
-        .sort({ date: -1 })
+        .sort({ startDate: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -131,7 +131,7 @@ export default class QuizzesDAO {
             }
           }
         )
-        .sort({ date: -1 })
+        .sort({ startDate: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -162,7 +162,7 @@ export default class QuizzesDAO {
             }
           }
         )
-        .sort({ date: -1 })
+        .sort({ startDate: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)
@@ -188,7 +188,7 @@ export default class QuizzesDAO {
             }
           }
         )
-        .sort({ date: -1 })
+        .sort({ startDate: -1 })
       return cursor.toArray()
     } catch (e) {
       console.error(e)

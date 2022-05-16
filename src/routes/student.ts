@@ -147,7 +147,7 @@ router.get('/semester/:semester', async (req, res) => {
 })
 
 /**
- * Route serving a list of students by branch and semester
+ * Route serving a list of student's emails by branch and semester
  * @name get/branch/:branch/semester/:semester
  */
 router.get('/branch/:branch/semester/:semester', async (req, res) => {
