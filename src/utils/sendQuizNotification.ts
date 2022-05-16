@@ -20,7 +20,8 @@ export const sendQuizNotification = async (
 
   const subject = `🧪 Attend ${title}`
   const quizUrl = `${process.env.SERVER_HOST_DOMAIN}/quiz/${quiz._id}`
-  const date = moment(quiz.date).format('DD/MM/YYYY hh:mm A')
+  const startDate = moment(quiz.startDate).format('DD/MM/YYYY hh:mm A')
+  const endDate = moment(quiz.endDate).format('DD/MM/YYYY hh:mm A')
 
   // read the template
   const templatePath = path.join(
@@ -31,7 +32,8 @@ export const sendQuizNotification = async (
   const template = handlebars.compile(source)
   const replacements = {
     title: title,
-    date,
+    startDate,
+    endDate,
     url: quizUrl,
     semester: quiz.semester,
     branch: quiz.branch,
