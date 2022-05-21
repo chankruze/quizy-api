@@ -9,7 +9,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as nodemailer from 'nodemailer'
 import * as handlebars from 'handlebars'
-import * as moment from 'moment'
+import * as moment from 'moment-timezone'
 import { Quiz } from '../types/quiz'
 
 export const sendQuizNotification = async (
@@ -20,8 +20,12 @@ export const sendQuizNotification = async (
 
   const subject = `🧪 Attend ${title}`
   const quizUrl = `${process.env.SERVER_HOST_DOMAIN}/quiz/${quiz._id}`
-  const startDate = moment(quiz.startDate).format('DD/MM/YYYY hh:mm A')
-  const endDate = moment(quiz.endDate).format('DD/MM/YYYY hh:mm A')
+  const startDate = moment(quiz.startDate)
+    .tz('Asia/Kolkata')
+    .format('DD/MM/YYYY hh:mm A')
+  const endDate = moment(quiz.endDate)
+    .tz('Asia/Kolkata')
+    .format('DD/MM/YYYY hh:mm A')
 
   // read the template
   const templatePath = path.join(
