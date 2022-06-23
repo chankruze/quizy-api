@@ -68,8 +68,8 @@ router.get('/student/:studentId', async (req, res) => {
     )
 
     // TODO: get the quiz by
-    const quizIds = new Set(submissions.map((submission) => submission.quizId))
-    console.log(quizIds)
+    // const quizIds = new Set(submissions.map((submission) => submission.quizId))
+    // console.log(quizIds)
 
     // TODO: calulate score
     // TODO: Add pagination
@@ -161,6 +161,33 @@ router.get('/all/count', async (req, res) => {
     res.status(500).json({
       message: 'Error fetching submission count',
       error: e
+    })
+  }
+})
+
+/***************************************************************************
+ * DELETE ROUTES
+ **************************************************************************/
+
+router.delete('/:submissionId', async (req, res) => {
+  try {
+    if (!req.params.submissionId) {
+      throw new Error('Submission ID not provided')
+    }
+
+    const deletedCount = await SubmissionsDAO.deleteOneQuiz(
+      req.params.submissionId
+    )
+
+    if (deletedCount === 1) {
+      return res.json({ message: 'Submission deleted' })
+    }
+
+    return res.status(404).json({ message: 'Submission not found' })
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Error deleting submission',
+      error: error.message
     })
   }
 })

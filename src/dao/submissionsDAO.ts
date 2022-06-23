@@ -156,4 +156,25 @@ export default class SubmissionsDAO {
       return []
     }
   }
+
+  /***************************************************************************
+   * DELETE METHODS
+   **************************************************************************/
+
+  /**
+   * @param {string} submissionId
+   * @returns {number} deletedCount
+   */
+  static async deleteOneQuiz (submissionId: string) {
+    try {
+      const result = await submissions.deleteOne({
+        _id: new ObjectId(submissionId)
+      })
+
+      return result.deletedCount
+    } catch (e) {
+      console.error(e)
+      return 0
+    }
+  }
 }
